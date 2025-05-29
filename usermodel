@@ -1,0 +1,18 @@
+usermodel
+full name - String
+email - string
+password - String
+cart - array of strings
+isadmin - boolean
+order-array
+contact-number
+picture-db
+
+product details
+image
+nameprice
+discount
+bgcolor
+panelcor
+textcolor
+
