@@ -1,0 +1,29 @@
+<%- include('./partials/header') %>
+
+<div class="px-20 py-10">
+  <h2 class="text-2xl font-bold mb-6">My Wishlist</h2>
+
+  <% if (wishlistItems.length > 0) { %>
+    <div class="grid grid-cols-3 gap-6">
+      <% wishlistItems.forEach(item => { %>
+        <div class="border rounded-lg overflow-hidden shadow-sm">
+          <div class="h-52 flex items-center justify-center bg-[<%= item.bgcolor %>]">
+            <img class="h-[12rem]" src="data:image/jpeg;base64,<%= item.image.toString('base64') %>" alt="">
+          </div>
+          <div class="px-4 py-2 bg-[<%= item.panelcolor %>] text-[<%= item.textcolor %>]">
+            <h3 class="font-semibold"><%= item.name %></h3>
+            <p class="text-sm">₹ <%= item.price %></p>
+            <div class="mt-2 flex gap-2">
+              <a href="/addtocart/<%= item._id %>" class="text-blue-600 hover:underline">Add to Cart</a>
+              <a href="/wishlist/remove/<%= item._id %>" class="text-red-600 hover:underline">Remove</a>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="text-gray-600 text-lg">Your wishlist is empty.</p>
+  <% } %>
+</div>
+
+<%- include('./partials/footer') %>

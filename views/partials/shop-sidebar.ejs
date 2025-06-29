@@ -1,0 +1,64 @@
+<!-- <div class="w-full md:w-[250px] p-4 border-r">
+  <form action="/shop" method="GET" class="space-y-6">
+    <div>
+      <label class="block font-semibold mb-2">Sort By</label>
+      <select name="sortby" class="border rounded px-2 py-1 w-full">
+        <option value="popular" <%= sortby === 'popular' ? 'selected' : '' %>>Popular</option>
+        <option value="price-asc" <%= sortby === 'price-asc' ? 'selected' : '' %>>Price: Low to High</option>
+        <option value="price-desc" <%= sortby === 'price-desc' ? 'selected' : '' %>>Price: High to Low</option>
+      </select>
+    </div>
+
+    <div>
+      <p class="font-semibold mb-2">Categories</p>
+      <div class="flex flex-col space-y-1">
+        <label><input type="radio" name="category" value="new" <%= category === 'new' ? 'checked' : '' %>> New Collection</label>
+        <label><input type="radio" name="category" value="all" <%= category === 'all' ? 'checked' : '' %>> All Products</label>
+        <label><input type="radio" name="category" value="discounted" <%= category === 'discounted' ? 'checked' : '' %>> Discounted Products</label>
+      </div>
+    </div>
+
+    <div>
+      <p class="font-semibold mb-2">Filter By</p>
+      <div class="flex flex-col space-y-1">
+        <label><input type="checkbox" name="available" value="true" <%= available === 'true' ? 'checked' : '' %>> Availability</label>
+        <label><input type="checkbox" name="discount" value="true" <%= discount === 'true' ? 'checked' : '' %>> Discount</label>
+      </div>
+    </div>
+
+    <button type="submit" class="mt-4 bg-black text-white py-2 px-4 rounded">Apply</button>
+  </form>
+</div> -->
+
+
+<div class="w-full md:w-[250px] p-4 border-r dark:border-gray-700 dark:bg-gray-900 text-black dark:text-white">
+  <form action="/shop" method="GET" class="space-y-6">
+    <div>
+      <label class="block font-semibold mb-2">Sort By</label>
+      <select name="sortby" class="border rounded px-2 py-1 w-full dark:bg-gray-800 dark:text-white dark:border-gray-600">
+        <option value="popular" <%= sortby === 'popular' ? 'selected' : '' %>>Popular</option>
+        <option value="price-asc" <%= sortby === 'price-asc' ? 'selected' : '' %>>Price: Low to High</option>
+        <option value="price-desc" <%= sortby === 'price-desc' ? 'selected' : '' %>>Price: High to Low</option>
+      </select>
+    </div>
+
+    <div>
+      <p class="font-semibold mb-2">Categories</p>
+      <div class="flex flex-col space-y-1">
+        <label><input type="radio" name="category" value="new" <%= category === 'new' ? 'checked' : '' %>> New Collection</label>
+        <label><input type="radio" name="category" value="all" <%= category === 'all' ? 'checked' : '' %>> All Products</label>
+        <label><input type="radio" name="category" value="discounted" <%= category === 'discounted' ? 'checked' : '' %>> Discounted Products</label>
+      </div>
+    </div>
+
+    <div>
+      <p class="font-semibold mb-2">Filter By</p>
+      <div class="flex flex-col space-y-1">
+        <label><input type="checkbox" name="available" value="true" <%= available === 'true' ? 'checked' : '' %>> Availability</label>
+        <label><input type="checkbox" name="discount" value="true" <%= discount === 'true' ? 'checked' : '' %>> Discount</label>
+      </div>
+    </div>
+
+    <button type="submit" class="mt-4 bg-black dark:bg-white text-white dark:text-black py-2 px-4 rounded">Apply</button>
+  </form>
+</div>

@@ -1,0 +1,152 @@
+<%- include('./partials/header') %>
+
+
+<div class="min-h-screen px-8 py-12 bg-gray-50">
+  <h1 class="text-4xl font-bold mb-8 text-center">Your Cart</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto bg-white p-6 rounded-xl shadow">
+    <!-- Left Column: Products -->
+    <div>
+      <% if (cartItems && cartItems.length > 0) { %>
+        <% cartItems.forEach(item => { %>
+          <div class="flex gap-5 items-center border-b py-4">
+            <img src="/product-image/<%= item._id %>" alt="product image" class="w-24 h-24 rounded-xl border shadow-sm object-cover">
+            <div class="flex-1">
+              <h2 class="text-lg font-semibold"><%= item.name %></h2>
+              <p>Qty: <%= item.quantity %></p>
+              <p>Price: ₹ <%= item.price %> | Discount: ₹ <%= item.discount %></p>
+              <p>Net: ₹ <%= item.net %></p>
+              <div class="mt-2 flex gap-4">
+                <a href="/cart/increase/<%= item._id %>" class="text-green-600 font-bold text-xl">+</a>
+                <a href="/cart/decrease/<%= item._id %>" class="text-yellow-600 font-bold text-xl">-</a>
+                <a href="/cart/remove/<%= item._id %>" class="text-red-600 font-semibold">Remove</a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="text-gray-500">Your cart is empty.</p>
+      <% } %>
+    </div>
+
+    <!-- Right Column: Price Summary -->
+    <div class="bg-gray-100 p-6 rounded-xl shadow">
+      <h3 class="text-2xl font-bold mb-6">Price Breakdown</h3>
+      <div class="space-y-3 text-lg">
+        <div class="flex justify-between">
+          <span>Total MRP</span>
+          <span>₹ <%= cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) %></span>
+        </div>
+        <div class="flex justify-between">
+          <span>Discount</span>
+          <span>₹ <%= cartItems.reduce((acc, item) => acc + item.discount * item.quantity, 0) %></span>
+        </div>
+        <div class="flex justify-between">
+          <span>Platform Fee</span>
+          <span>₹ 20</span>
+        </div>
+        <div class="flex justify-between border-b pb-2">
+          <span>Shipping</span>
+          <span>FREE</span>
+        </div>
+        <div class="flex justify-between font-bold text-xl pt-4">
+          <span>Total</span>
+          <span class="text-green-600">₹ <%= cartTotal %></span>
+        </div>
+      </div>
+
+      <% if (cartTotal > 0) { %>
+        <div class="mt-6">
+          <button onclick="payNow()" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition">
+            Pay ₹<%= cartTotal %> Now
+          </button>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<!-- Razorpay Integration -->
+<!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  function payNow() {
+    const total = <%= cartTotal %>;
+
+    const options = {
+      key: "rzp_test_OZrFAcL6k5KA07", // Replace with your actual Razorpay key
+      amount: total * 100, // Razorpay accepts amount in paise
+      currency: "INR",
+      name: "SCatch Store",
+      description: "Payment for items in cart",
+      handler: function (response) {
+        alert("✅ Payment Successful!\n🧾 Payment ID: " + response.razorpay_payment_id);
+        window.location.href = "/order-history"; // Redirect to order history after payment
+      },
+      prefill: {
+        name: "Test User",
+        email: "test@example.com",
+        contact: "9999999999"
+      },
+      theme: {
+        color: "#0f766e"
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+  }
+</script> -->
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  async function payNow() {
+    const total = <%= cartTotal %>;
+
+    try {
+      // Step 1: Create Razorpay order on the server
+      const res = await fetch('/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: total })
+      });
+
+      const order = await res.json();
+
+      // Step 2: Open Razorpay Checkout
+      const options = {
+        key: "rzp_test_OZrFAcL6k5KA07", // ✅ Your Razorpay key
+        amount: order.amount,
+        currency: "INR",
+        name: "SCatch Store",
+        description: "Payment for items in cart",
+        order_id: order.id,
+        handler: function (response) {
+          // Step 3: Send payment details to backend for verification
+          fetch('/verify-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(response),
+          }).then(res => {
+            if (res.redirected) window.location.href = res.url;
+            else alert("❌ Payment verification failed.");
+          });
+        },
+        prefill: {
+          name: "Test User",
+          email: "test@example.com",
+          contact: "9999999999"
+        },
+        theme: { color: "#0f766e" }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      alert("Oops! Something went wrong during checkout.");
+      console.error(err);
+    }
+  }
+</script>
+
+
+<%- include('./partials/footer') %>

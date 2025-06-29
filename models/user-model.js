@@ -1,26 +1,42 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://127.0.0.1:27017/SCatch");
-
-const userSchema = mongoose.Schema({
-    fullname: {
-        type: String,
-        minLength: 3,
-        trim: true,
+const userSchema = new mongoose.Schema({
+  fullname: {
+    type: String,
+    minLength: 3,
+    trim: true,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  
+role: {
+  type: String,
+  enum: ["user", "admin"],
+  default: "user",
+},
+  password: String,
+  cart: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "product",
     },
-    email: String,
-    password: String,
-    cart: {
-        type: Array,
-        default: []
-    },
-    isadmin: Boolean,
-    orders: {
-        type: Array,
-        default: []
-    },
-    contact: Number,
-    picture: String,
-});
+  ],
+  isadmin: Boolean,
+  orders: {
+    type: Array,
+    default: []
+  },
+  wishlist: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "product"
+  }
+],
+  contact: Number,
+  picture: String,
+}, { timestamps: true }); // ✅ Add this line
 
 module.exports = mongoose.model("user", userSchema);
